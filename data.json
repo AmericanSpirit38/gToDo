@@ -1,0 +1,10 @@
+[
+    {
+        "id": 1,
+        "title": "Buy groceries",
+        "description": "Milk, Bread, Eggs",
+        "priority": "1",
+        "due_date": "2024-07-01",
+        "completed": false
+    }
+]
