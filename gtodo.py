@@ -81,10 +81,36 @@ while True:
             print(Fore.LIGHTWHITE_EX + "Exiting GTodo. Goodbye!" + Style.RESET_ALL)
             break
         elif command == "help":
-            if inp[1]:
+
+            try:
                 sub = inp[1].lower()
                 if sub == "list":
-                    print(Fore.CYAN + "Placeholder"+ Style.RESET_ALL)
+                    print(Fore.CYAN + "    list"+ Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - No arguments: Lists all incomplete tasks." + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - 'all': Lists all tasks." + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - 'completed': Lists all completed tasks." + Style.RESET_ALL)
+                    continue
+                elif sub == "add":
+                    print(Fore.CYAN + "    add <title> <description> <priority> <due_date>" + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - Adds a new task with the specified title, description, priority, and due date." + Style.RESET_ALL)
+                    continue
+                elif sub == "remove":
+                    print(Fore.CYAN + "    remove <task_id>" + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - Removes the task with the specified ID." + Style.RESET_ALL)
+                    continue
+                elif sub == "edit":
+                    print(Fore.CYAN + "    edit <task_id> <category> <new_data>" + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - Edits the specified category of the task with the given ID to the new data." + Style.RESET_ALL)
+                    continue
+                elif sub == "exit":
+                    print(Fore.CYAN + "    exit" + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - Exits the GTodo application." + Style.RESET_ALL)
+                    continue
+                else:
+                    print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX + f"Unknown command '{sub}'. Type 'help' for a list of commands." + Style.RESET_ALL)
+                    continue
+            except IndexError:
+                pass
             print(Fore.CYAN + "Available commands:" + Style.RESET_ALL)
             print(Fore.LIGHTWHITE_EX + "Use help <command> for more information" + Style.RESET_ALL)
             print(Fore.CYAN + "    list" + Fore.LIGHTWHITE_EX + " - Display tasks" + Style.RESET_ALL)
