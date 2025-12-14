@@ -1,17 +1,19 @@
 import actions
 from tabulate import tabulate
 import shlex
+from colorama import init, Fore, Style
 
 class GTodo:
     def __init__(self):
         self.actions = actions.Actions("data.json")
 
+init(autoreset=True)
 
 gtodo = GTodo()
 command_list = ["list", "add", "remove","edit", "exit", "help"]
-print("Welcome to GTodo! Type 'help <command you need help with>' for a list of commands.")
-print("Available commands: list, add, remove, edit, exit")
-print("WARNING: If you enter an input with spaces (e.g., a task title or description), please enclose it in quotes.(e.g. if your task title is Buy groceries, enter it as \"Buy groceries\")")
+print(Fore.LIGHTBLUE_EX + "Welcome to GTodo!" + Style.RESET_ALL)
+print(Fore.LIGHTWHITE_EX + "Available commands: list, add, remove, edit, exit" + Style.RESET_ALL)
+print(Fore.RED + "WARNING: " + Style.RESET_ALL + Fore.LIGHTWHITE_EX + "If you enter an input with spaces (e.g., a task title or description), please enclose it in quotes.(e.g. if your task title is Buy groceries, enter it as \"Buy groceries\")" + Style.RESET_ALL)
 while True:
     inp = shlex.split(input("GTodo> "))
     if not inp:
