@@ -45,20 +45,22 @@ while True:
                 print(Fore.WHITE + tabulate(rows, headers=colored_headers, tablefmt="github") + Style.RESET_ALL)
             except Exception:
                 print(df.to_string(index=False))
-        if command == "add":
+        elif command == "add":
             title, description, priority, due_date= inp[1], inp[2], inp[3], inp[4]
             if not title or not description or not priority or not due_date:
                 print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Missing required fields. Usage: add <title> <description> <priority> <due_date>" + Style.RESET_ALL)
                 continue
             gtodo.actions.add_task(title, description, priority, due_date)
-        if command == "remove":
+            print(Fore.LIGHTWHITE_EX + "Task added successfully." + Style.RESET_ALL)
+        elif command == "remove":
             try:
                 task_id = int(inp[1])
             except (IndexError, ValueError):
                 print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Please provide a valid task ID to remove. Usage: remove <task_id>" + Style.RESET_ALL)
                 continue
             gtodo.actions.remove_task(task_id)
-        if command == "edit":
+            print(Fore.LIGHTWHITE_EX + f"Task {task_id} removed successfully." + Style.RESET_ALL)
+        elif command == "edit":
             try:
                 task_id = int(inp[1])
                 category = inp[2]
@@ -68,7 +70,18 @@ while True:
                 continue
             gtodo.actions.edit_task(task_id, category, new_data)
             print(Fore.LIGHTWHITE_EX + f"Task {task_id} updated successfully." + Style.RESET_ALL)
-        if command == "exit":
+        elif command == "exit":
             print(Fore.LIGHTWHITE_EX + "Exiting GTodo. Goodbye!" + Style.RESET_ALL)
             break
+        elif command == "help":
+            print(Fore.CYAN + "Available commands:" + Style.RESET_ALL)
+            print(Fore.LIGHTWHITE_EX + "Use help <command> for more information" + Style.RESET_ALL)
+            print(Fore.CYAN + "    list" + Fore.LIGHTWHITE_EX + " - Display tasks" + Style.RESET_ALL)
+            print(Fore.CYAN + "    add" + Fore.LIGHTWHITE_EX + " - Add a new task" + Style.RESET_ALL)
+            print(Fore.CYAN + "    remove" + Fore.LIGHTWHITE_EX + " - Remove a task" + Style.RESET_ALL)
+            print(Fore.CYAN + "    edit" + Fore.LIGHTWHITE_EX + " - Edit a task" + Style.RESET_ALL)
+            print(Fore.CYAN + "    exit" + Fore.LIGHTWHITE_EX + " - Exit the application" + Style.RESET_ALL)
+    else:
+        print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX + f"Unknown command '{command}'. Type 'help' for a list of commands." + Style.RESET_ALL)
+
 
