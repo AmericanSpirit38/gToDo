@@ -51,10 +51,10 @@ class Actions:
         }
         self.JSon_manager.append_json(new_task)
         self.tasks.append(new_task)
-        print("Task added successfully.")
     def remove_task(self, task_id):
         self.JSon_manager.remove_json(task_id)
         self.tasks = self.JSon_manager.read_json()
-        print("Task removed successfully.")
     def mark_task_completed(self, task_id):
         self.JSon_manager.edit_json(task_id,"completed", True)
+    def edit_task(self, task_id, category, new_data):
+        self.JSon_manager.edit_json(task_id, category, new_data)

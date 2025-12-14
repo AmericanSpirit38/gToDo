@@ -48,10 +48,27 @@ while True:
         if command == "add":
             title, description, priority, due_date= inp[1], inp[2], inp[3], inp[4]
             if not title or not description or not priority or not due_date:
-                print("Error: Missing required fields. Usage: add <title> <description> <priority> <due_date>")
+                print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Missing required fields. Usage: add <title> <description> <priority> <due_date>" + Style.RESET_ALL)
                 continue
             gtodo.actions.add_task(title, description, priority, due_date)
+        if command == "remove":
+            try:
+                task_id = int(inp[1])
+            except (IndexError, ValueError):
+                print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Please provide a valid task ID to remove. Usage: remove <task_id>" + Style.RESET_ALL)
+                continue
+            gtodo.actions.remove_task(task_id)
+        if command == "edit":
+            try:
+                task_id = int(inp[1])
+                category = inp[2]
+                new_data = " ".join(inp[3:])
+            except (IndexError, ValueError):
+                print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Please provide valid inputs to edit. Usage: edit <task_id> <category> <new_data>" + Style.RESET_ALL)
+                continue
+            gtodo.actions.edit_task(task_id, category, new_data)
+            print(Fore.LIGHTWHITE_EX + f"Task {task_id} updated successfully." + Style.RESET_ALL)
         if command == "exit":
-            print("Exiting GTodo. Goodbye!")
+            print(Fore.LIGHTWHITE_EX + "Exiting GTodo. Goodbye!" + Style.RESET_ALL)
             break
 
