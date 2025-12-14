@@ -23,9 +23,16 @@ while True:
         continue
     command = inp[0].lower()
     if command in command_list:
-        if command == "list":
+        if command == "list" or command == "ls":
+            df = None
             # request a pandas DataFrame from actions
-            df = gtodo.actions.list_tasks(parse_dates=False, set_index=None)
+            if len(inp) >= 2:
+                if inp[1].lower() == "all":
+                    df = gtodo.actions.list_tasks(None, True)
+                elif inp[1].lower() == "completed":
+                    df = gtodo.actions.list_tasks(True, False)
+            else:
+                df = gtodo.actions.list_tasks(False, False)
             if df is None:
                 continue
             # empty DataFrame message
@@ -34,7 +41,7 @@ while True:
             except Exception:
                 empty = False
             if empty:
-                print("No tasks found.")
+                print(Fore.LIGHTWHITE_EX + "No tasks found." + Style.RESET_ALL)
                 continue
             # pretty print: prefer tabulate, fallback to pandas' to_string
             try:
@@ -42,7 +49,7 @@ while True:
                 rows = df.reset_index().values.tolist()
                 headers = list(df.reset_index().columns)
                 colored_headers = [Fore.CYAN + str(h) + Style.RESET_ALL + Fore.LIGHTWHITE_EX for h in headers]
-                print(Fore.WHITE + tabulate(rows, headers=colored_headers, tablefmt="github") + Style.RESET_ALL)
+                print(Fore.LIGHTWHITE_EX + tabulate(rows, headers=colored_headers, tablefmt="github") + Style.RESET_ALL)
             except Exception:
                 print(df.to_string(index=False))
         elif command == "add":
@@ -74,6 +81,10 @@ while True:
             print(Fore.LIGHTWHITE_EX + "Exiting GTodo. Goodbye!" + Style.RESET_ALL)
             break
         elif command == "help":
+            if inp[1]:
+                sub = inp[1].lower()
+                if sub == "list":
+                    print(Fore.CYAN + "Placeholder"+ Style.RESET_ALL)
             print(Fore.CYAN + "Available commands:" + Style.RESET_ALL)
             print(Fore.LIGHTWHITE_EX + "Use help <command> for more information" + Style.RESET_ALL)
             print(Fore.CYAN + "    list" + Fore.LIGHTWHITE_EX + " - Display tasks" + Style.RESET_ALL)
