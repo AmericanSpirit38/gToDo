@@ -2,20 +2,23 @@ import actions
 from tabulate import tabulate
 import shlex
 from colorama import init, Fore, Style
+import os
 
 class GTodo:
     def __init__(self):
-        self.actions = actions.Actions("data.json")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        data_path = os.path.join(base_dir, "data.json")
+        self.actions = actions.Actions(data_path)
 
 init(autoreset=True)
 
 gtodo = GTodo()
 command_list = ["list", "add", "remove","edit", "exit", "help"]
-print(Fore.LIGHTBLUE_EX + "Welcome to GTodo!" + Style.RESET_ALL)
+print(Fore.CYAN + "Welcome to GTodo!" + Style.RESET_ALL)
 print(Fore.LIGHTWHITE_EX + "Available commands: list, add, remove, edit, exit" + Style.RESET_ALL)
 print(Fore.RED + "WARNING: " + Style.RESET_ALL + Fore.LIGHTWHITE_EX + "If you enter an input with spaces (e.g., a task title or description), please enclose it in quotes.(e.g. if your task title is Buy groceries, enter it as \"Buy groceries\")" + Style.RESET_ALL)
 while True:
-    inp = shlex.split(input("GTodo> "))
+    inp = shlex.split(input(Fore.LIGHTWHITE_EX+ "GTodo> " + Style.RESET_ALL + Fore.GREEN))
     if not inp:
         continue
     command = inp[0].lower()
@@ -38,7 +41,8 @@ while True:
                 # use reset_index so index column (like id) is shown as a column
                 rows = df.reset_index().values.tolist()
                 headers = list(df.reset_index().columns)
-                print(tabulate(rows, headers=headers, tablefmt="github"))
+                colored_headers = [Fore.CYAN + str(h) + Style.RESET_ALL + Fore.LIGHTWHITE_EX for h in headers]
+                print(Fore.WHITE + tabulate(rows, headers=colored_headers, tablefmt="github") + Style.RESET_ALL)
             except Exception:
                 print(df.to_string(index=False))
         if command == "add":
