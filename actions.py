@@ -46,3 +46,8 @@ class Actions:
         self.JSon_manager.edit_json(task_id,"completed", True)
     def edit_task(self, task_id, category, new_data):
         self.JSon_manager.edit_json(task_id, category, new_data)
+    def search_tasks(self, keyword):
+        self.tasks = self.JSon_manager.read_json() or []
+        filtered_tasks = [task for task in self.tasks if keyword.lower() in task.get("title", "").lower() or keyword.lower() in task.get("description", "").lower()]
+        self.tasks = filtered_tasks
+        return self.tasks_to_dataframe()

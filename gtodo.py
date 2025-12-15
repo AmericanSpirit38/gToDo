@@ -13,7 +13,7 @@ class GTodo:
 init(autoreset=True)
 
 gtodo = GTodo()
-command_list = ["list", "add", "remove","edit", "exit", "help"]
+command_list = ["list", "add", "remove","edit", "mark", "search", "exit", "help"]
 print(Fore.CYAN + "Welcome to GTodo!" + Style.RESET_ALL)
 print(Fore.LIGHTWHITE_EX + "Available commands: list, add, remove, edit, exit" + Style.RESET_ALL)
 print(Fore.RED + "WARNING: " + Style.RESET_ALL + Fore.LIGHTWHITE_EX + "If you enter an input with spaces (e.g., a task title or description), please enclose it in quotes.(e.g. if your task title is Buy groceries, enter it as \"Buy groceries\")" + Style.RESET_ALL)
@@ -77,6 +77,40 @@ while True:
                 continue
             gtodo.actions.edit_task(task_id, category, new_data)
             print(Fore.LIGHTWHITE_EX + f"Task {task_id} updated successfully." + Style.RESET_ALL)
+        elif command == "mark":
+            try:
+                task_id = int(inp[1])
+            except (IndexError, ValueError):
+                print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Please provide a valid task ID to mark as completed. Usage: mark <task_id>" + Style.RESET_ALL)
+                continue
+            gtodo.actions.mark_task_completed(task_id)
+            print(Fore.LIGHTWHITE_EX + f"Task {task_id} marked as completed." + Style.RESET_ALL)
+        elif command == "search":
+            try:
+                keyword = " ".join(inp[1:])
+            except IndexError:
+                print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX +"Please provide a keyword to search for. Usage: search <keyword>" + Style.RESET_ALL)
+                continue
+            df = gtodo.actions.search_tasks(keyword)
+            if df is None :
+                continue
+            # empty DataFrame message
+            try:
+                empty = df.empty
+            except Exception:
+                empty = False
+            if empty:
+                print(Fore.LIGHTWHITE_EX + "No tasks found matching the keyword." + Style.RESET_ALL)
+                continue
+            # pretty print: prefer tabulate, fallback to pandas' to_string
+            try:
+                # use reset_index so index column (like id) is shown as a column
+                rows = df.reset_index().values.tolist()
+                headers = list(df.reset_index().columns)
+                colored_headers = [Fore.CYAN + str(h) + Style.RESET_ALL + Fore.LIGHTWHITE_EX for h in headers]
+                print(Fore.LIGHTWHITE_EX + tabulate(rows, headers=colored_headers, tablefmt="github") + Style.RESET_ALL)
+            except Exception:
+                print(df.to_string(index=False))
         elif command == "exit":
             print(Fore.LIGHTWHITE_EX + "Exiting GTodo. Goodbye!" + Style.RESET_ALL)
             break
@@ -102,6 +136,10 @@ while True:
                     print(Fore.CYAN + "    edit <task_id> <category> <new_data>" + Style.RESET_ALL)
                     print(Fore.LIGHTWHITE_EX + "        - Edits the specified category of the task with the given ID to the new data." + Style.RESET_ALL)
                     continue
+                elif sub == "mark":
+                    print(Fore.CYAN + "    mark <task_id>" + Style.RESET_ALL)
+                    print(Fore.LIGHTWHITE_EX + "        - Marks the task with the specified ID as completed." + Style.RESET_ALL)
+                    continue
                 elif sub == "exit":
                     print(Fore.CYAN + "    exit" + Style.RESET_ALL)
                     print(Fore.LIGHTWHITE_EX + "        - Exits the GTodo application." + Style.RESET_ALL)
@@ -117,6 +155,7 @@ while True:
             print(Fore.CYAN + "    add" + Fore.LIGHTWHITE_EX + " - Add a new task" + Style.RESET_ALL)
             print(Fore.CYAN + "    remove" + Fore.LIGHTWHITE_EX + " - Remove a task" + Style.RESET_ALL)
             print(Fore.CYAN + "    edit" + Fore.LIGHTWHITE_EX + " - Edit a task" + Style.RESET_ALL)
+            print(Fore.CYAN + "    mark" + Fore.LIGHTWHITE_EX + " - Mark a task as completed" + Style.RESET_ALL)
             print(Fore.CYAN + "    exit" + Fore.LIGHTWHITE_EX + " - Exit the application" + Style.RESET_ALL)
     else:
         print(Fore.RED + "Error: " + Fore.LIGHTWHITE_EX + f"Unknown command '{command}'. Type 'help' for a list of commands." + Style.RESET_ALL)
